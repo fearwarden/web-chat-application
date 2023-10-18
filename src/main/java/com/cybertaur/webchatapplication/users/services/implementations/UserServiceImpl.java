@@ -32,4 +32,10 @@ public class UserServiceImpl implements UserService {
 
         return new UserDto(user);
     }
+
+    @Override
+    public UserDto findUserById(String id) {
+        UserEntity user = this.userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        return new UserDto(user);
+    }
 }
