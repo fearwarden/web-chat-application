@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
@@ -31,22 +32,25 @@ public class RoomController {
     private final Set<UserDto> onlineUsers = new LinkedHashSet<>();
     private final UserRepository userRepository;
 
-    @MessageMapping("/chat")
-    public void handleChatMessage(@Payload Message message, SimpMessageHeaderAccessor headerAccessor) {
-        this.simpMessagingTemplate.convertAndSend("/topic/all/messages", message);
-        // TODO: Make exceptions
-        UserEntity user = this.userRepository.findById(message.getSenderId()).orElseThrow(() -> new RuntimeException("User does not exist"));
-
-        if (UserAction.JOINED.equals(message.getAction())) {
-            String userDestination = String.format("/topic/%s/messages", user.getId());
-            onlineUsers.forEach(onlineUser -> {
-                Message newMessage = new Message(user.getId(), null, UserAction.JOINED, null);
-                simpMessagingTemplate.convertAndSend(userDestination, newMessage);
-            });
-            UserDto userDto = new UserDto(user);
-            headerAccessor.getSessionAttributes().put("user", userDto);
-            onlineUsers.add(userDto);
-        }
+    @MessageMapping("/chat.sendMessage")
+    @SendTo("/topic/public")
+    public String handleChatMessage(@Payload String message, SimpMessageHeaderAccessor headerAccessor) {
+//        this.simpMessagingTemplate.convertAndSend("/topic/all/messages", message);
+//        // TODO: Make exceptions
+//        UserEntity user = this.userRepository.findById(message.getSenderId()).orElseThrow(() -> new RuntimeException("User does not exist"));
+//
+//        if (UserAction.JOINED.equals(message.getAction())) {
+//            String userDestination = String.format("/topic/%s/messages", user.getId());
+//            onlineUsers.forEach(onlineUser -> {
+//                Message newMessage = new Message(user.getId(), null, UserAction.JOINED, null);
+//                simpMessagingTemplate.convertAndSend(userDestination, newMessage);
+//            });
+//            UserDto userDto = new UserDto(user);
+//            headerAccessor.getSessionAttributes().put("user", userDto);
+//            onlineUsers.add(userDto);
+//        }
+        System.out.println(message);
+        return message;
     }
 
     @EventListener
