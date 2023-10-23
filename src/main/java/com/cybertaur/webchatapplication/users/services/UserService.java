@@ -1,8 +1,9 @@
 package com.cybertaur.webchatapplication.users.services;
 
 import com.cybertaur.webchatapplication.users.dto.response.UserDto;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService {
-    UserDto register(String email, String password, String username);
+    UserDetailsService userDetailsService();
     UserDto findUserById(String id);
 }
