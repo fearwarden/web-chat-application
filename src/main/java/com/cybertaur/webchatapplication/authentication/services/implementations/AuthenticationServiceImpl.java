@@ -3,7 +3,6 @@ package com.cybertaur.webchatapplication.authentication.services.implementations
 import com.cybertaur.webchatapplication.authentication.services.AuthenticationService;
 import com.cybertaur.webchatapplication.authentication.services.JwtService;
 import com.cybertaur.webchatapplication.users.dto.response.JwtResponseDto;
-import com.cybertaur.webchatapplication.users.dto.response.UserDto;
 import com.cybertaur.webchatapplication.users.exceptions.throwables.UserNotFoundException;
 import com.cybertaur.webchatapplication.users.models.TokenEntity;
 import com.cybertaur.webchatapplication.users.models.UserEntity;
@@ -12,7 +11,6 @@ import com.cybertaur.webchatapplication.users.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +28,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void register(String email, String password, String username) {
+        //TODO: add confirmation password and check if they matches
         Optional<UserEntity> optionalUser = this.userRepository.findByEmail(email);
 
         if (optionalUser.isPresent()) throw new IllegalArgumentException("User exist with email: " + email);
