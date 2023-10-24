@@ -61,6 +61,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         JwtResponseDto jwtResponse = new JwtResponseDto();
         jwtResponse.setAccessToken(accessToken);
         jwtResponse.setRefreshToken(token.getRefreshToken());
+        jwtResponse.setEmail(user.getEmail());
+        jwtResponse.setUsername(user.getUsername());
         return jwtResponse;
     }
 
@@ -77,6 +79,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         JwtResponseDto newToken = new JwtResponseDto();
         newToken.setRefreshToken(newRefreshToken);
         newToken.setAccessToken(accessToken);
+        newToken.setEmail(user.getEmail());
+        newToken.setUsername(user.getUsername());
         return newToken;
     }
 }
