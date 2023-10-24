@@ -1,6 +1,7 @@
 package com.cybertaur.webchatapplication.authentication;
 
 import com.cybertaur.webchatapplication.authentication.dto.request.LoginRequestDto;
+import com.cybertaur.webchatapplication.authentication.dto.request.RefreshTokenRequestDto;
 import com.cybertaur.webchatapplication.authentication.services.AuthenticationService;
 import com.cybertaur.webchatapplication.users.dto.request.RegisterDto;
 import com.cybertaur.webchatapplication.users.dto.response.JwtResponseDto;
@@ -29,5 +30,12 @@ public class AuthenticationController {
     public HttpResponse<JwtResponseDto> login(@RequestBody @Validated LoginRequestDto body) {
         JwtResponseDto loginService = this.authenticationService.login(body.getEmail(), body.getPassword());
         return new HttpResponse<>(true, "User successfully logged in.", loginService);
+    }
+
+    //TODO: add endpoint to refresh the token
+    @PostMapping("/refresh")
+    public HttpResponse<JwtResponseDto> refresh(@RequestBody @Validated RefreshTokenRequestDto body) {
+        JwtResponseDto tokens = this.authenticationService.refresh(body.getRefreshToken());
+        return new HttpResponse<>(true, "Access token successfully generated.", tokens);
     }
 }

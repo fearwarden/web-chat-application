@@ -1,5 +1,6 @@
 package com.cybertaur.webchatapplication.authentication.services.implementations;
 
+import com.cybertaur.webchatapplication.authentication.exceptions.throwables.RefreshTokenNotFoundException;
 import com.cybertaur.webchatapplication.authentication.services.AuthenticationService;
 import com.cybertaur.webchatapplication.authentication.services.JwtService;
 import com.cybertaur.webchatapplication.users.dto.response.JwtResponseDto;
@@ -61,5 +62,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         jwtResponse.setAccessToken(accessToken);
         jwtResponse.setRefreshToken(token.getRefreshToken());
         return jwtResponse;
+    }
+
+    @Override
+    public JwtResponseDto refresh(String refreshToken) {
+        TokenEntity token = this.tokenRepository.findByRefreshToken(refreshToken).orElseThrow(RefreshTokenNotFoundException::new);
+        UserEntity user = this.userRepository.findById(token.getUserId()).orElseThrow(UserNotFoundException::new);
+
+        String accessToken = this.jwtService.generateToken(user);
+        String newRefreshToken = this.jwtService.generateRefreshToken();
+        token.setRefreshToken(newRefreshToken);
+        this.tokenRepository.save(token);
+
+        JwtResponseDto newToken = new JwtResponseDto();
+        newToken.setRefreshToken(newRefreshToken);
+        newToken.setAccessToken(accessToken);
+        return newToken;
     }
 }
