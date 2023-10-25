@@ -32,7 +32,6 @@ public class AuthenticationController {
         return new HttpResponse<>(true, "User successfully logged in.", tokens);
     }
 
-    //TODO: add endpoint to refresh the token
     @PostMapping("/refresh")
     public HttpResponse<JwtResponseDto> refresh(@CookieValue("refreshToken") String refreshToken, HttpServletResponse response) {
         JwtResponseDto tokens = this.authenticationService.refresh(refreshToken);

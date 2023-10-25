@@ -4,6 +4,7 @@ import com.cybertaur.webchatapplication.authentication.services.JwtService;
 import com.cybertaur.webchatapplication.users.services.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -33,16 +34,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
+        final Cookie[] cookies = request.getCookies();
+        String jwt = null;
         final String userEmail;
 
-        if (!authHeader.startsWith("Bearer ")) {
+        if (cookies == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        jwt = authHeader.substring(7);
+        for (Cookie cookie : cookies) {
+            if ("accessToken".equals(cookie.getName())) {
+                jwt = cookie.getValue();
+                break;
+            }
+        }
+
+        if (jwt == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         try {
             this.jwtService.isTokenExpired(jwt);
