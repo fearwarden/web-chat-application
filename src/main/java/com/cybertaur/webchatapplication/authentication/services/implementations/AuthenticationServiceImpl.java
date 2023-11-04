@@ -38,7 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String userId = UUID.randomUUID().toString();
         user.setId(userId);
         user.setEmail(email);
-        user.setUsername(username);
+        user.setName(username);
         user.setPassword(this.passwordEncoder.encode(password));
         this.userRepository.save(user);
 
@@ -62,7 +62,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         jwtResponse.setAccessToken(accessToken);
         jwtResponse.setRefreshToken(token.getRefreshToken());
         jwtResponse.setEmail(user.getEmail());
-        jwtResponse.setUsername(user.getUsername());
+        jwtResponse.setUsername(user.getName());
         jwtResponse.setId(user.getId());
         return jwtResponse;
     }
@@ -81,7 +81,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         newToken.setRefreshToken(newRefreshToken);
         newToken.setAccessToken(accessToken);
         newToken.setEmail(user.getEmail());
-        newToken.setUsername(user.getUsername());
+        newToken.setUsername(user.getName());
         newToken.setId(user.getId());
         return newToken;
     }

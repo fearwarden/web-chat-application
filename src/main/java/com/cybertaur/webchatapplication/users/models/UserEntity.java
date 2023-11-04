@@ -2,6 +2,7 @@ package com.cybertaur.webchatapplication.users.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,7 +20,7 @@ public class UserEntity implements UserDetails {
     @Id
     private String id;
     private String email;
-    private String username;
+    private String name;
     private String password;
 
     @Override
@@ -51,4 +52,5 @@ public class UserEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
