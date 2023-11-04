@@ -35,7 +35,7 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
                 String[] cookieParts = cookie.split("=");
                 if ("accessToken".equals(cookieParts[0])) {
                     String accessToken = cookieParts.length > 1 ? cookieParts[1] : null;
-                    
+
                     // Check if token expired.
                     try {
                         this.jwtService.isTokenExpired(accessToken);
