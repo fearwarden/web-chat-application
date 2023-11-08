@@ -1,4 +1,4 @@
-package com.cybertaur.webchatapplication.rooms.dto;
+package com.cybertaur.webchatapplication.rooms.dto.response;
 
 import com.cybertaur.webchatapplication.users.enums.UserAction;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,9 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Message {
+    private String roomId;
     private String senderId;
+    private String receiverId;
     private String content;
     private UserAction action;
     private Instant timestamp;

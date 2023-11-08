@@ -1,6 +1,6 @@
 package com.cybertaur.webchatapplication.rooms.models;
 
-import com.cybertaur.webchatapplication.rooms.dto.Message;
+import com.cybertaur.webchatapplication.rooms.dto.response.Message;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
