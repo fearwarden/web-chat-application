@@ -4,6 +4,8 @@ import com.cybertaur.webchatapplication.rooms.dto.request.CreateRoomDto;
 import com.cybertaur.webchatapplication.rooms.dto.response.Message;
 import com.cybertaur.webchatapplication.rooms.dto.response.RoomResponse;
 import com.cybertaur.webchatapplication.rooms.services.RoomService;
+import com.cybertaur.webchatapplication.users.models.UserEntity;
+import com.cybertaur.webchatapplication.users.services.UserService;
 import com.cybertaur.webchatapplication.utils.HttpResponse;
 import com.cybertaur.webchatapplication.users.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -23,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoomController {
     private final SimpMessagingTemplate simpMessagingTemplate;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final RoomService roomService;
 
     @PostMapping
@@ -38,8 +41,8 @@ public class RoomController {
         return new HttpResponse<>(true, "Rooms successfully fetched.", responses);
     }
 
-    @MessageMapping("/private-message")
-    public Message recMessage(@Payload Message message) {
+    @MessageMapping({"/private-message"})
+    public Message recMessage(@Payload Message message, Principal principal) {
         this.simpMessagingTemplate.convertAndSendToUser(message.getReceiverId(), "/private", message);
         System.out.println(message.toString());
         return message;
